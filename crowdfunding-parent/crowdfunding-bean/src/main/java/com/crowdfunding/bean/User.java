@@ -1,10 +1,7 @@
 package com.crowdfunding.bean;
 
-import org.apache.commons.collections.map.HashedMap;
-import javax.swing.text.Keymap;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
 
 public class User implements Serializable {
     private Integer id;
