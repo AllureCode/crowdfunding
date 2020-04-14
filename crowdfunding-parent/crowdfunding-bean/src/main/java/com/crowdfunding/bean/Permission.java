@@ -12,6 +12,7 @@ public class Permission implements Serializable {
     private String  icon;
     private boolean open=true;
     private boolean checked=false;
+    private int level;
     private List<Permission> children = new ArrayList<Permission>();
 
     public Integer getId() {
@@ -78,6 +79,14 @@ public class Permission implements Serializable {
         this.children = children;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     @Override
     public String toString() {
         return "Permission{" +
@@ -88,6 +97,7 @@ public class Permission implements Serializable {
                 ", icon='" + icon + '\'' +
                 ", open=" + open +
                 ", checked=" + checked +
+                ", level=" + level +
                 ", children=" + children +
                 '}';
     }
