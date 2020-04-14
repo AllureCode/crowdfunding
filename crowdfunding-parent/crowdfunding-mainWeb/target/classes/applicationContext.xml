@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        https://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--引入数据库的基本配置-->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="maxPoolSize" value="30"/>
+        <property name="minPoolSize" value="2"/>
+    </bean>
+    <!--配置自动扫描的包-->
+    <context:component-scan base-package="com.crowdfunding.manager.Service.* ">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--配置mybatis的SqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--自动扫描那个mapper.xml文件-->
+        <property name="mapperLocations" value="classpath*:mybatis/*Mapper.xml"/>
+        <!--配置别名-->
+        <!--        <property name="typeAliasesPackage" value="com.crowdfunding.manager.dao"/>-->
+        <!--mybatis配置文件所在地-->
+        <property name="configLocation" value="classpath:mybatis/mybatisConfig.xml"/>
+    </bean>
+    <!--配置dao接口所在包 spring会自动扫描包下的类-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.crowdfunding.*.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+    <!--配置spring声明式事务管理-->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <!--    &lt;!&ndash;配置shiro start&ndash;&gt;-->
+    <!--    &lt;!&ndash;自定义realm&ndash;&gt;-->
+    <!--    <bean id="myReal" class="com.crowdfunding.realm.MyRealm"/>-->
+    <!--    &lt;!&ndash;配置shiro的安全管理器(用于登录等权限)&ndash;&gt;-->
+    <!--    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">-->
+    <!--        <property name="realm" ref="myReal"/>-->
+    <!--    </bean>-->
+    <!--    &lt;!&ndash;配置shiro过滤器&ndash;&gt;-->
+    <!--    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">-->
+    <!--        &lt;!&ndash;配置shiro的核心安全接口 &ndash;&gt;-->
+    <!--        <property name="securityManager" ref="securityManager"/>-->
+    <!--        &lt;!&ndash;身份认证失败跳转到登录页面的配置&ndash;&gt;-->
+    <!--        <property name="loginUrl" value="/login.jsp"/>-->
+    <!--        <property name="filterChainDefinitions">-->
+
+    <!--            <value>-->
+    <!--                &lt;!&ndash;当访问login的时候不需要过滤 访问admin下的页面都需要过滤 看是否登录了&ndash;&gt;-->
+    <!--                /login=anon-->
+    <!--                /jsp/**=authc-->
+    <!--            </value>-->
+    <!--        </property>-->
+    <!--    </bean>-->
+    <!--    &lt;!&ndash;保证实现了shiro内部lifecycle函数bean的执行&ndash;&gt;-->
+    <!--    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor">-->
+    <!--    </bean>-->
+    <!--    &lt;!&ndash;开启Shiro注解&ndash;&gt;-->
+    <!--    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"-->
+    <!--          depends-on="lifecycleBeanPostProcessor"/>-->
+    <!--    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+    <!--        <property name="securityManager" ref="securityManager"/>-->
+    <!--    </bean>-->
+
+    <!--配置事务通知-->
+    <!-- 配置事务通知属性 -->
+    <tx:advice id="transactionAdvice" transaction-manager="dataSourceTransactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="java.lang.Exception"/>
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.crowdfunding..ServiceImpl.*(..))"/>
+    </aop:config>
+</beans>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crowdfunding.manager.dao.IRoleDao">
+
+    <select id="queryCount" resultType="java.lang.Integer" parameterType="map">
+
+        select count(*) from
+        t_role
+        <where>
+            <if test="queryText!=null">
+                -- '%${queryText}%' 容易发生sql注入 所以使用concat
+                name like concat('%',#{queryText},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="queryRoles" resultType="com.crowdfunding.bean.Role" parameterType="list">
+
+        select *from t_role
+        <where>
+            <if test="queryText!=null">
+                name like concat('%',#{queryText},'%')
+            </if>
+        </where>
+        limit #{startIndex},#{pageSize}
+
+    </select>
+</mapper>

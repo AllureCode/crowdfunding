@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crowdfunding.manager.dao.IMemberDao">
+    <resultMap id="resultMember" type="com.crowdfunding.bean.Member">
+        <id property="id" column="id"/>
+        <result property="accttype" column="accttype"/>
+        <result property="authstatus" column="authstatus"/>
+        <result property="cardnum" column="cardnum"/>
+        <result property="email" column="email"/>
+        <result property="loginacct" column="loginacct"/>
+        <result property="realname" column="realname"/>
+        <result property="username" column="username"/>
+        <result property="userpswd" column="userpswd"/>
+        <result property="usertype" column="usertype"/>
+    </resultMap>
+
+    <insert id="insertMemberByParameter" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+      insert into t_member(loginacct,userpswd,username,email,usertype)
+    values(#{loginacct},#{userpswd}，#{email},#{usertype})
+    </insert>
+
+    <select id="queryMember" resultMap="resultMember" parameterType="list">
+        select *from t_member
+        <where>
+            <if test="loginacct!=null and loginacct!='' ">
+                and loginacct =#{loginacct}
+            </if>
+            <if test="userpswd!=null and userpswd!='' ">
+                and userpswd =#{userpswd}
+            </if>
+        </where>
+    </select>
+
+</mapper>
