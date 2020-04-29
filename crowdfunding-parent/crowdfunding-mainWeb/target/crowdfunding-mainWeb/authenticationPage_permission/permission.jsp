@@ -22,7 +22,7 @@
     <style>
         .tree li {
             list-style-type: none;
-            cursor:pointer;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -43,7 +43,10 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="glyphicon glyphicon-th-list"></i> 权限菜单列表 <div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
+                <div class="panel-heading"><i class="glyphicon glyphicon-th-list"></i> 权限菜单列表
+                    <div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i
+                            class="glyphicon glyphicon-question-sign"></i></div>
+                </div>
                 <div class="panel-body">
                     <ul id="treeDemo" class="ztree"></ul>
                 </div>
@@ -55,7 +58,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">帮助</h4>
             </div>
             <div class="modal-body">
@@ -84,10 +88,10 @@
 <script src="${APP_PATH}/static/ztree/jquery.ztree.all-3.5.min.js"></script>
 <script type="text/javascript">
     $(function () {
-        $(".list-group-item").click(function(){
-            if ( $(this).find("ul") ) {
+        $(".list-group-item").click(function () {
+            if ($(this).find("ul")) {
                 $(this).toggleClass("tree-closed");
-                if ( $(this).hasClass("tree-closed") ) {
+                if ($(this).hasClass("tree-closed")) {
                     $("ul", this).hide("fast");
                 } else {
                     $("ul", this).show("fast");
@@ -97,20 +101,56 @@
         });
         showMenu();
 
-        var setting = {};
+        var setting = {
+            //更换图标
+            view: {
+                addDiyDom: function (treeId, treeNode) {
+                    var icoObj = $("#" + treeNode.tId + "_ico");
+                    if (treeNode.icon) {
+                        icoObj.removeClass("button ico_docu ico_open").addClass(treeNode.icon).css("background", "");
+                    }
+                },
+                addHoverDom: function(treeId, treeNode){
+                            var aObj = $("#" + treeNode.tId + "_a");
+                            aObj.attr("href", "javascript:;");
+                            aObj.attr("target", "");//防止默认跳转空白页面
+                            if (treeNode.editNameFlag || $("#btnGroup"+treeNode.tId).length>0) return;
+                            var s = '<span id="btnGroup'+treeNode.tId+'">';
+                            if ( treeNode.level == 0 ) { //根节点
+                                s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" onclick="window.location.href=\'${APP_PATH}/permission/toAdd.html?id='+treeNode.id+'\' " >&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
+                            } else if ( treeNode.level == 1 ) { //分节点
+                                s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;"  href="#" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
+                                if (treeNode.children.length == 0) {
+                                    s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" >&nbsp;&nbsp;<i class="fa fa-fw fa-times rbg "></i></a>';
+                                }
+                                s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" >&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
+                            } else if ( treeNode.level == 2 ) { //叶子节点
+                                s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;"  href="#" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
+                                s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#">&nbsp;&nbsp;<i class="fa fa-fw fa-times rbg "></i></a>';
+                            }
+
+                            s += '</span>';
+                            aObj.after(s);
+                        },
+                        removeHoverDom: function(treeId, treeNode){
+                            $("#btnGroup"+treeNode.tId).remove();
+                        }
+            }
+
+        };
         $.ajax({
-            url:"${APP_PATH}/permission/loadData.do",
-            type:"post",
-            dataType:"json",
-            success:function (result) {
-               if (result.success) {
-                   //将object类型转为json
-                   // alert(  JSON.stringify(result.root));
-                   var zNodes = result.root;
-                   $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-               }else{
-                   alert("失败")
-               }
+            url: "${APP_PATH}/permission/loadData.do",
+            type: "post",
+            dataType: "json",
+            success: function (result) {
+                if (result.success) {
+                    //将object类型转为json
+                    // alert(  JSON.stringify(result.root));
+                    var zNodes = result.root;
+                    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                } else {
+                    alert("失败")
+                }
             }
         });
 

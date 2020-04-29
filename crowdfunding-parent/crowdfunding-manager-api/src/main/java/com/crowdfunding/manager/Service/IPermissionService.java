@@ -11,4 +11,6 @@ public interface IPermissionService {
     List<Permission> getChildrenPermissionBypid(Integer id);
 
     List<Permission> queryAll();
+
+    boolean savaPermission(Permission permission);
 }

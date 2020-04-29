@@ -13,4 +13,6 @@ public interface IPermissionDao {
 
 
     List<Permission> queryAll();
+
+    boolean savaPermission(Permission permission);
 }

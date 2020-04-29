@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -23,6 +24,11 @@ public class PermissionController {
     @RequestMapping("/toPermissionPage")
     public String toPermissionPage() {
         return "/authenticationPage_permission/permission";
+    }
+
+    @RequestMapping("/toAdd")
+    public String toAddPermissionPage(){
+        return "/authenticationPage_permission/addPermission";
     }
 
     @RequestMapping("/loadData")
@@ -121,4 +127,21 @@ public class PermissionController {
 //        return null;
 //    }
 
+    @RequestMapping("/addPermission")
+    public String addPermission(/*@RequestParam("name")String name,
+                                @RequestParam("icon")String icon,
+                                @RequestParam("url") String url,
+                                @RequestParam("pid")String pid*/
+                                Permission permission,
+                                HttpServletResponse response) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = iPermissionService.savaPermission(permission);
+        if(flag){
+            jsonObject.put("success",Boolean.TRUE);
+        }else {
+            jsonObject.put("success", Boolean.FALSE);
+        }
+        responseWriteUtils.Write(response, jsonObject);
+        return null;
+    }
 }

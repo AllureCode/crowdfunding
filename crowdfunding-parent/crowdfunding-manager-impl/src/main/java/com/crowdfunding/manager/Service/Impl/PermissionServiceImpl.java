@@ -26,4 +26,9 @@ public class PermissionServiceImpl implements IPermissionService {
     public List<Permission> queryAll() {
         return iPermissionDao.queryAll();
     }
+
+    @Override
+    public boolean savaPermission(Permission permission) {
+        return iPermissionDao.savaPermission(permission);
+    }
 }

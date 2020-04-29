@@ -11,13 +11,17 @@
         <result column="url" property="url"/>
         <result column="icon" property="icon"/>
     </resultMap>
+    <insert id="savaPermission">
+     insert into t_permission(pid,name,icon,url)
+     values (#{pid},#{name},#{icon},#{url})
+    </insert>
 
     <select id="getRootPermission" resultType="com.crowdfunding.bean.Permission">
         select *from t_permission where pid is null
     </select>
 
     <select id="getChildrenPermissionBypid" resultMap="permissionResult" parameterType="integer">
-select  *from t_permission where pid=#{pid}
+    select  *from t_permission where pid=#{pid}
     </select>
 
     <select id="queryAll" resultMap="permissionResult">
