@@ -6,9 +6,11 @@ import com.crowdfunding.util.responseWriteUtils;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +31,13 @@ public class PermissionController {
     @RequestMapping("/toAdd")
     public String toAddPermissionPage(){
         return "/authenticationPage_permission/addPermission";
+    }
+    @RequestMapping("/toEdit")
+    public String toEditPermissionPage(@RequestParam("id") Integer id, Model model){
+        //回显当前用户信息
+       Permission permission =  iPermissionService.getPermissionByID(id);
+       model.addAttribute("permission", permission);
+        return "/authenticationPage_permission/editPermission";
     }
 
     @RequestMapping("/loadData")
@@ -144,4 +153,22 @@ public class PermissionController {
         responseWriteUtils.Write(response, jsonObject);
         return null;
     }
+    @RequestMapping("/UpdatePermission")
+    public String UpdatePermission(/*@RequestParam("name")String name,
+                                @RequestParam("icon")String icon,
+                                @RequestParam("url") String url,
+                                @RequestParam("pid")String pid*/
+            Permission permission,
+            HttpServletResponse response) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = iPermissionService.updatePermission(permission);
+        if(flag){
+            jsonObject.put("success",Boolean.TRUE);
+        }else {
+            jsonObject.put("success", Boolean.FALSE);
+        }
+        responseWriteUtils.Write(response, jsonObject);
+        return null;
+    }
+
 }

@@ -13,4 +13,8 @@ public interface IPermissionService {
     List<Permission> queryAll();
 
     boolean savaPermission(Permission permission);
+
+    Permission getPermissionByID(Integer id);
+
+    boolean updatePermission(Permission permission);
 }

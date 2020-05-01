@@ -31,4 +31,14 @@ public class PermissionServiceImpl implements IPermissionService {
     public boolean savaPermission(Permission permission) {
         return iPermissionDao.savaPermission(permission);
     }
+
+    @Override
+    public Permission getPermissionByID(Integer id) {
+        return iPermissionDao.getPermissionByID(id);
+    }
+
+    @Override
+    public boolean updatePermission(Permission permission) {
+        return iPermissionDao.updatePermission(permission);
+    }
 }
