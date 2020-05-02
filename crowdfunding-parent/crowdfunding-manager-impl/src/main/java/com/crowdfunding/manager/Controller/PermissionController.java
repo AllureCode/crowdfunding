@@ -136,6 +136,13 @@ public class PermissionController {
 //        return null;
 //    }
 
+    /**
+     *添加许可信息
+     * @param permission
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/addPermission")
     public String addPermission(/*@RequestParam("name")String name,
                                 @RequestParam("icon")String icon,
@@ -153,6 +160,14 @@ public class PermissionController {
         responseWriteUtils.Write(response, jsonObject);
         return null;
     }
+
+    /**
+     * 更新许可信息
+     * @param permission
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/UpdatePermission")
     public String UpdatePermission(/*@RequestParam("name")String name,
                                 @RequestParam("icon")String icon,
@@ -171,4 +186,17 @@ public class PermissionController {
         return null;
     }
 
+    @RequestMapping("/Delete")
+    public String delete(@RequestParam("id") Integer id,
+                         HttpServletResponse response) throws Exception {
+        boolean flag = iPermissionService.deletePermission(id);
+        JSONObject jsonObject = new JSONObject();
+        if(flag){
+            jsonObject.put("success",Boolean.TRUE);
+        }else {
+            jsonObject.put("success", Boolean.FALSE);
+        }
+        responseWriteUtils.Write(response, jsonObject);
+        return null;
+    }
 }

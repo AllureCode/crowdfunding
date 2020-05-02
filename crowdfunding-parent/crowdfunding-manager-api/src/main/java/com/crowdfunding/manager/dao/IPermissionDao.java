@@ -19,4 +19,6 @@ public interface IPermissionDao {
     Permission getPermissionByID(Integer id);
 
     boolean updatePermission(Permission permission);
+
+    boolean deletePermission(Integer id);
 }

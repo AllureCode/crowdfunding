@@ -15,6 +15,8 @@ public interface IPermissionService {
     boolean savaPermission(Permission permission);
 
     Permission getPermissionByID(Integer id);
-
+    
     boolean updatePermission(Permission permission);
+
+    boolean deletePermission(Integer id);
 }

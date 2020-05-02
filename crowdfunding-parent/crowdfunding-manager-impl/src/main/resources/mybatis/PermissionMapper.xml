@@ -19,6 +19,9 @@
         update t_permission set name=#{name},icon=#{icon},url=#{url}
         where id=#{id}
     </update>
+    <delete id="deletePermission">
+        delete from t_permission where id=#{id}
+    </delete>
 
     <select id="getRootPermission" resultType="com.crowdfunding.bean.Permission">
         select *from t_permission where pid is null

@@ -41,4 +41,9 @@ public class PermissionServiceImpl implements IPermissionService {
     public boolean updatePermission(Permission permission) {
         return iPermissionDao.updatePermission(permission);
     }
+
+    @Override
+    public boolean deletePermission(Integer id) {
+        return iPermissionDao.deletePermission(id);
+    }
 }
