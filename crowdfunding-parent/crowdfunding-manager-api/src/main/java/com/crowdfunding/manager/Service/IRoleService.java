@@ -7,4 +7,6 @@ import java.util.Map;
 
 public interface IRoleService {
     Page<Role> queryRolePage(Map<String, Object> map);
+
+    boolean saveRolePermission(Integer roleid, Integer[] idsArray);
 }

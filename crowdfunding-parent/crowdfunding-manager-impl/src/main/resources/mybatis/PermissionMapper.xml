@@ -37,4 +37,8 @@
     <select id="getPermissionByID" resultType="com.crowdfunding.bean.Permission">
         select *from  t_permission where id=#{id}
     </select>
+    <select id="queryRolePermissionedByRoleId" parameterType="integer" resultType="java.lang.Integer">
+        select permissionid
+        from t_role_permission where roleid = #{roleid}
+    </select>
 </mapper>

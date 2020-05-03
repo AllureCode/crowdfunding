@@ -3,6 +3,15 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.crowdfunding.manager.dao.IRoleDao">
+    <insert id="saveRolePermission">
+        <foreach collection="idsArray" item="permissionid" separator=";">
+            insert into t_role_permission(roleid,permissionid)
+            values(#{roleid},#{permissionid})
+        </foreach>
+    </insert>
+    <delete id="deleteRolePermisison">
+        delete from t_role_permission where roleid=#{roleid}
+    </delete>
 
     <select id="queryCount" resultType="java.lang.Integer" parameterType="map">
 

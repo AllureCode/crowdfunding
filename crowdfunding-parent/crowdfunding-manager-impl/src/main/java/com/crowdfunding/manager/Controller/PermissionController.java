@@ -84,19 +84,23 @@ public class PermissionController {
 //            queryPermissionData(child);
 //        }
 //    }
-    //方法三 采用一次性查询数据库 然后遍历集合
+    /**
+     *  方法三 采用一次性查询数据库 然后遍历集合
+     */
     public String loadPermissionData(HttpServletResponse response) throws Exception {
-        List<Permission> root = new ArrayList<Permission>(); //创建父集合
+        //创建父集合
+        List<Permission> root = new ArrayList<Permission>();
         //查询到所有的permission
         List<Permission> permissions = iPermissionService.queryAll();
         for (Permission permission : permissions) {
             //判断谁的pid为null 找到顶级菜单
             if (permission.getPid() == null) {
-                root.add(permission);//放入根节点
+                //放入根节点
+                root.add(permission);
             } else {
                 //仍为父节点 继续遍历
                 for (Permission innerChilder : permissions) {
-                    if (permission.getPid() == innerChilder.getId()) {
+                    if (permission.getPid().equals(innerChilder.getId())) {
                         innerChilder.getChildren().add(permission);
                         break;
                     }

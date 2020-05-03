@@ -14,9 +14,10 @@ import java.util.Map;
 public class RoleServiceImpl implements IRoleService {
     @Autowired
     private IRoleDao iRoleDao;
+
     @Override
     public Page<Role> queryRolePage(Map<String, Object> map) {
-        Page<Role> page = new Page<>((Integer)map.get("pageNo"), (Integer)map.get("pageSize"));
+        Page<Role> page = new Page<>((Integer) map.get("pageNo"), (Integer) map.get("pageSize"));
         //查询总条数
         Integer countRoles = iRoleDao.queryCount(map);
         page.setTotalSize(countRoles);
@@ -25,5 +26,11 @@ public class RoleServiceImpl implements IRoleService {
         List<Role> list = iRoleDao.queryRoles(map);
         page.setDate(list);
         return page;
+    }
+
+    @Override
+    public boolean saveRolePermission(Integer roleid, Integer[] idsArray) {
+       iRoleDao.deleteRolePermisison(roleid);
+       return  iRoleDao.saveRolePermission(roleid, idsArray);
     }
 }

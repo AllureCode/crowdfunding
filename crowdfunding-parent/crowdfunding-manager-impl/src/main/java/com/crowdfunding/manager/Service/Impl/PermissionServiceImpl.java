@@ -46,4 +46,9 @@ public class PermissionServiceImpl implements IPermissionService {
     public boolean deletePermission(Integer id) {
         return iPermissionDao.deletePermission(id);
     }
+
+    @Override
+    public List<Integer> queryRolePermissionedByRoleId(Integer roleid) {
+        return iPermissionDao.queryRolePermissionedByRoleId(roleid);
+    }
 }

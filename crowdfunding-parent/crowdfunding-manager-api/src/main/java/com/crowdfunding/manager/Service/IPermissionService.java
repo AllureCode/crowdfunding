@@ -19,4 +19,6 @@ public interface IPermissionService {
     boolean updatePermission(Permission permission);
 
     boolean deletePermission(Integer id);
+
+    List<Integer> queryRolePermissionedByRoleId(Integer roleid);
 }

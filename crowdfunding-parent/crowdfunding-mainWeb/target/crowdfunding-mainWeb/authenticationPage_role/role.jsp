@@ -160,7 +160,7 @@
                         content += '<td><input id=" ' + n.id + ' " type="checkbox"></td>';
                         content += '<td>' + n.name + '</td>';
                         content += '<td>';
-                        content += ' <button type="button" onclick="window.location.href=\'${APP_PATH}/user/toAssignRole.html?id=' + n.id + '\' "  class="btn btn-success btn-xs" ><i class=" glyphicon glyphicon-check"></i></button>';
+                        content += ' <button type="button" onclick="window.location.href=\'${APP_PATH}/role/toAssignPermission.html?roleid=' + n.id + '\' "  class="btn btn-success btn-xs" ><i class=" glyphicon glyphicon-check"></i></button>';
                         content += ' <button type="button" onclick="window.location.href=\'${APP_PATH}/user/toEdit.html?id=' + n.id + '\' "  class="btn btn-primary btn-xs" ><i class=" glyphicon glyphicon-pencil"></i></button>';
                         content += ' <button type="button"  onclick="deleteUser(' + n.id + ',\'' + n.loginacct + '\');" class="btn btn-danger btn-xs" ><i class=" glyphicon glyphicon-remove"></i></button>';
                         content += '</td>';
