@@ -119,7 +119,7 @@ public class UserController {
                             HttpServletResponse response) throws Exception {
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("loginacct", loginacct);
-        parameter.put("userpswd", MD5Utils.MD5(userpswd, strUuidUtils.strTo()));
+        parameter.put("userpswd", MD5Utils.MD5(userpswd, "admin"));
         parameter.put("username", username);
         parameter.put("email", email);
         boolean falg = iUserService.insertMemberByParameter(parameter);
@@ -135,7 +135,7 @@ public class UserController {
     @RequestMapping("/alterUser")
     public String alterUser(User user, HttpServletResponse response) throws Exception {
         JSONObject result = new JSONObject();
-        user.setUserpswd(MD5Utils.MD5(user.getUserpswd(), strUuidUtils.strTo()));
+        user.setUserpswd(MD5Utils.MD5(user.getUserpswd(),"admin"));
         Integer integer = iUserService.updateUser(user);
         if (integer > 0) {
             result.put("success", Boolean.TRUE);

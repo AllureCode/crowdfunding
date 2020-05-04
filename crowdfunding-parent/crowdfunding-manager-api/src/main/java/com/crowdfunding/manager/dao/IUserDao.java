@@ -1,4 +1,5 @@
 package com.crowdfunding.manager.dao;
+import com.crowdfunding.bean.Permission;
 import com.crowdfunding.bean.Role;
 import com.crowdfunding.bean.User;
 import org.apache.ibatis.annotations.Param;
@@ -81,4 +82,6 @@ public interface IUserDao {
 
 
     boolean deleteRolePower(@Param("parseInt") Integer parseInt, @Param("parseInt1") Integer[] parseInt1);
+
+    List<Permission> queryPermissionByUserId(Integer id);
 }

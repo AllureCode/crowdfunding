@@ -20,8 +20,8 @@ public class MD5Utils {
      */
     public static void main(String[] args) {
 
-        System.out.println(MD5Utils.MD5("000000", strUuidUtils.strTo()));
-        SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println(simpleFormatter.format(new Date()));
+        System.out.println(MD5Utils.MD5("000000","admin"));
+//        SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        System.out.println(simpleFormatter.format(new Date()));
     }
 }

@@ -1,6 +1,7 @@
 package com.crowdfunding.manager.Service;
 
 import com.crowdfunding.bean.Page;
+import com.crowdfunding.bean.Permission;
 import com.crowdfunding.bean.Role;
 import com.crowdfunding.bean.User;
 import org.apache.ibatis.annotations.Param;
@@ -95,4 +96,6 @@ public interface IUserService {
      * @return
      */
     boolean deleteRolePower(Integer id, Integer[] idsArray);
+
+    List<Permission> queryPermissionByUserId(Integer id);
 }

@@ -1,6 +1,7 @@
 package com.crowdfunding.manager.Service.Impl;
 
 import com.crowdfunding.bean.Page;
+import com.crowdfunding.bean.Permission;
 import com.crowdfunding.bean.Role;
 import com.crowdfunding.bean.User;
 import com.crowdfunding.manager.Service.IUserService;
@@ -105,5 +106,10 @@ private IUserDao iUserDao;
     @Override
     public boolean deleteRolePower(Integer id, Integer[] idsArray) {
         return iUserDao.deleteRolePower(id,idsArray);
+    }
+
+    @Override
+    public List<Permission> queryPermissionByUserId(Integer id) {
+        return iUserDao.queryPermissionByUserId( id) ;
     }
 }
