@@ -1,6 +1,7 @@
 package com.crowdfunding.controller;
 
 import com.crowdfunding.bean.Member;
+import com.crowdfunding.bean.Permission;
 import com.crowdfunding.bean.User;
 import com.crowdfunding.manager.Service.IMemberService;
 import com.crowdfunding.manager.Service.IUserService;
@@ -18,9 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/dologin")
@@ -47,6 +46,31 @@ public class doLoginController {
             //管理员登录
             List<User> users = iUserService.queryUserByParameter(map);
             session.setAttribute("user", users);
+            //-对拦截器控制的代码----------
+            User user1 = users.get(0);
+            List<Permission> myPermission = iUserService.queryPermissionByUserId(user1.getId());
+            Set<String> set = new HashSet<String>();
+            Permission permissionRoot = null;
+            for (Permission permission : myPermission) {
+                //获取到用户的所有路径权限
+                set.add("/"+permission.getUrl());
+                //判断谁的pid为null 找到顶级菜单
+                if (permission.getPid() == null) {
+                    //放入根节点
+                    permissionRoot = permission;
+                } else {
+                    //仍为父节点 继续遍历
+                    for (Permission innerChilder : myPermission) {
+                        if (permission.getPid().equals(innerChilder.getId())) {
+                            innerChilder.getChildren().add(permission);
+                            break;
+                        }
+                    }
+                }
+            }
+            session.setAttribute("myUrl", set);
+            session.setAttribute("permissionRoot", permissionRoot);
+            //---对拦截器控制的结束代码---------
             if(users.isEmpty()){
                 jsonObject.put("success", Boolean.FALSE);
                 responseWriteUtils.Write(response,jsonObject);

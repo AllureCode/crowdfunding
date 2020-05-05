@@ -8,14 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class DispatcherController {
-    @Autowired
-    private IUserService userService;
 
     @RequestMapping("/index_1")
     public String index() {
@@ -34,27 +30,6 @@ public class DispatcherController {
 
     @RequestMapping("/main")
     public String main(HttpSession session) {
-        List<User> user = (List<User>) session.getAttribute("user");
-        User user1 = user.get(0);
-        List<Permission> myPermission = userService.queryPermissionByUserId(user1.getId());
-        Permission permissionRoot = null;
-        for (Permission permission : myPermission) {
-            //判断谁的pid为null 找到顶级菜单
-            if (permission.getPid() == null) {
-                //放入根节点
-                permissionRoot = permission;
-            } else {
-                //仍为父节点 继续遍历
-                for (Permission innerChilder : myPermission) {
-                    if (permission.getPid().equals(innerChilder.getId())) {
-                        innerChilder.getChildren().add(permission);
-                        break;
-                    }
-                }
-            }
-        }
-        session.setAttribute("permissionRoot", permissionRoot);
-        System.out.println(permissionRoot);
         return "/authenticationPage_user/main";
     }
 

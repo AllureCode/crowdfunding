@@ -60,6 +60,12 @@
         <property name="maxUploadSize" value="2097152"/>
         <property name="resolveLazily" value="true"/>
     </bean>
+
+    <!--注册拦截器-->
+    <mvc:interceptors>
+        <bean id="loginInterceptor" class="com.crowdfunding.interceptor.LoginInterceptor"></bean>
+        <bean id="urlInterceptor" class="com.crowdfunding.interceptor.UrlInterceptor"></bean>
+    </mvc:interceptors>
     <!--开启spring mvc注解驱动-->
     <mvc:annotation-driven/>
 </beans>
