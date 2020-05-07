@@ -89,8 +89,9 @@
                             <tfoot>
                             <tr>
                                 <td colspan="6" align="center">
-                                    <ul class="pagination">
-                                    </ul>
+<%--                                    <ul class="pagination">--%>
+<%--                                    </ul>--%>
+                                    <div id="Pageination" class="pagination"> <!--显示分页--></div>
                                 </td>
                             </tr>
 
@@ -108,6 +109,8 @@
 <script src="${APP_PATH}/script/docs.min.js"></script>
 <script src="${APP_PATH}/static/layer/layer.js"></script>
 <script src="${APP_PATH}/static/js/menu.js"></script>
+<script src="${APP_PATH}/static/pagination/jquery.pagination.js"></script>
+<script src="${APP_PATH}/static/pagination/pagination.css"></script>
 <script type="text/javascript">
     $(function () {
         $(".list-group-item").click(function () {
@@ -123,7 +126,7 @@
         /**
          * 页面加载完成调用查询函数
          */
-        queryUserPage(1);
+        queryUserPage(0);
         /**
          * 对页面展开闭合控制
          **/
@@ -144,7 +147,7 @@
      */
     function queryUserPage(currentPage) {
         var loadIndex = -1;
-        jsonObject.pageNo = currentPage; //将当前页数据传入json的pageNo中
+        jsonObject.pageNo = currentPage+1; //将当前页数据传入json的pageNo中
         $.ajax({
             type: "post",
             data: jsonObject,
@@ -174,25 +177,37 @@
                         content += '</tr>';
                     });
                     $("tbody").html(content);
-                    var contentBar = "";
-                    if ((result.userPage.pageNo) == 1) {
-                        contentBar += '<li class="disabled"><a href="#">上一页</a></li>';
-                    } else {
-                        contentBar += '<li><a href="#" onclick="pageChange(' + (currentPage - 1) + ') " >上一页</a></li>';
-                    }
-                    for (var i = 1; i <= result.userPage.totalNo; i++) {
-                        contentBar += '<li ';
-                        if (result.userPage.pageNo == i) {
-                            contentBar += ' class="active" ';
-                        }
-                        contentBar += '><a href="#" onclick="pageChange(' + i + ')">' + i + '</a></li>';
-                    }
-                    if ((result.userPage.pageNo) == (result.userPage.totalNo)) {
-                        contentBar += '<li class="disabled"><a href="#">下一页</a></li>';
-                    } else {
-                        contentBar += '<li><a href="#" onclick="pageChange(' + (currentPage + 1) + ')">下一页</a></li>'
-                    }
-                    $(".pagination").html(contentBar);
+
+                    //使用pagination分页工具 不再需要自己拼接字符串
+                    var num_total  =  result.userPage.totalSize;//获取到总条数
+                    $("#Pageination").pagination(num_total,{
+                        num_edge_entries:2 ,//边缘数
+                        num_display_entries:10,//主题页数
+                        prev_text:"上一页",
+                        next_text:"下一页",
+                        items_per_page:10,  //每页显示的条数
+                        current_page:(result.userPage.pageNo-1),//当前页 索引从0开始
+                        callback:queryUserPage
+                    });
+                    // var contentBar = "";
+                    // if ((result.userPage.pageNo) == 1) {
+                    //     contentBar += '<li class="disabled"><a href="#">上一页</a></li>';
+                    // } else {
+                    //     contentBar += '<li><a href="#" onclick="pageChange(' + (currentPage - 1) + ') " >上一页</a></li>';
+                    // }
+                    // for (var i = 1; i <= result.userPage.totalNo; i++) {
+                    //     contentBar += '<li ';
+                    //     if (result.userPage.pageNo == i) {
+                    //         contentBar += ' class="active" ';
+                    //     }
+                    //     contentBar += '><a href="#" onclick="pageChange(' + i + ')">' + i + '</a></li>';
+                    // }
+                    // if ((result.userPage.pageNo) == (result.userPage.totalNo)) {
+                    //     contentBar += '<li class="disabled"><a href="#">下一页</a></li>';
+                    // } else {
+                    //     contentBar += '<li><a href="#" onclick="pageChange(' + (currentPage + 1) + ')">下一页</a></li>'
+                    // }
+                    // $(".pagination").html(contentBar);
                 } else {
                     layer.msg("查询有误", {time: 1000, icon: 5, shift: 6});
                 }

@@ -28,32 +28,33 @@ public class doLoginController {
     private IUserService iUserService;
     @Autowired
     private IMemberService iMemberService;
+
     /**
      * 对登录方法的控制
      */
     @RequestMapping("/login")
-    public String doLoginl(@RequestParam(value = "loginacct")String loginacct,
-                           @RequestParam(value = "userpswd")String userpswd,
-                           @RequestParam(value = "IDtype")String IDtype,
+    public String doLoginl(@RequestParam(value = "loginacct") String loginacct,
+                           @RequestParam(value = "userpswd") String userpswd,
+                           @RequestParam(value = "IDtype") String IDtype,
                            HttpServletResponse response,
-                          HttpSession session
-                            )throws Exception{
-        Map<String ,Object> map = new HashMap<>();
+                           HttpSession session
+    ) throws Exception {
+        Map<String, Object> map = new HashMap<>();
         JSONObject jsonObject = new JSONObject();
-        map.put("loginacct",loginacct);
-        map.put("userpswd", MD5Utils.MD5(userpswd,"admin"));
-        if(IDtype.equals("user")){
+        map.put("loginacct", loginacct);
+        map.put("userpswd", MD5Utils.MD5(userpswd, "admin"));
+        if (IDtype.equals("user")) {
             //管理员登录
             List<User> users = iUserService.queryUserByParameter(map);
             session.setAttribute("user", users);
-            //-对拦截器控制的代码----------
+            //-对拦截器控制的代码(获取到当前用户的所有路径)----------
             User user1 = users.get(0);
             List<Permission> myPermission = iUserService.queryPermissionByUserId(user1.getId());
             Set<String> set = new HashSet<String>();
             Permission permissionRoot = null;
             for (Permission permission : myPermission) {
                 //获取到用户的所有路径权限
-                set.add("/"+permission.getUrl());
+                set.add("/" + permission.getUrl());
                 //判断谁的pid为null 找到顶级菜单
                 if (permission.getPid() == null) {
                     //放入根节点
@@ -71,24 +72,24 @@ public class doLoginController {
             session.setAttribute("myUrl", set);
             session.setAttribute("permissionRoot", permissionRoot);
             //---对拦截器控制的结束代码---------
-            if(users.isEmpty()){
+            if (users.isEmpty()) {
                 jsonObject.put("success", Boolean.FALSE);
-                responseWriteUtils.Write(response,jsonObject);
-            }else {
-                jsonObject.put("success",Boolean.TRUE);
-                responseWriteUtils.Write(response,jsonObject);
+                responseWriteUtils.Write(response, jsonObject);
+            } else {
+                jsonObject.put("success", Boolean.TRUE);
+                responseWriteUtils.Write(response, jsonObject);
             }
         }
-        if(IDtype.equals("member")){
+        if (IDtype.equals("member")) {
             //会员登录
             List<Member> members = iMemberService.queryMemberByParameter(map);
             session.setAttribute("member", members);
-            if (members.isEmpty()){
-                jsonObject.put("success",Boolean.FALSE);
-                responseWriteUtils.Write(response,jsonObject);
-            }else {
-                jsonObject.put("success",Boolean.TRUE);
-                responseWriteUtils.Write(response,jsonObject);
+            if (members.isEmpty()) {
+                jsonObject.put("success", Boolean.FALSE);
+                responseWriteUtils.Write(response, jsonObject);
+            } else {
+                jsonObject.put("success", Boolean.TRUE);
+                responseWriteUtils.Write(response, jsonObject);
             }
         }
         return null;
