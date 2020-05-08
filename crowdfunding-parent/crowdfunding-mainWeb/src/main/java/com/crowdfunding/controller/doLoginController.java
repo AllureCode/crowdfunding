@@ -45,11 +45,10 @@ public class doLoginController {
         map.put("userpswd", MD5Utils.MD5(userpswd, "admin"));
         if (IDtype.equals("user")) {
             //管理员登录
-            List<User> users = iUserService.queryUserByParameter(map);
+            User users = iUserService.queryUserByParameter(map);
             session.setAttribute("user", users);
             //-对拦截器控制的代码(获取到当前用户的所有路径)----------
-            User user1 = users.get(0);
-            List<Permission> myPermission = iUserService.queryPermissionByUserId(user1.getId());
+            List<Permission> myPermission = iUserService.queryPermissionByUserId(users.getId());
             Set<String> set = new HashSet<String>();
             Permission permissionRoot = null;
             for (Permission permission : myPermission) {
@@ -72,7 +71,7 @@ public class doLoginController {
             session.setAttribute("myUrl", set);
             session.setAttribute("permissionRoot", permissionRoot);
             //---对拦截器控制的结束代码---------
-            if (users.isEmpty()) {
+            if (users == null) {
                 jsonObject.put("success", Boolean.FALSE);
                 responseWriteUtils.Write(response, jsonObject);
             } else {

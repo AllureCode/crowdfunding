@@ -47,7 +47,7 @@
         select *from t_user;
     </select>
 
-    <select id="queryUserByParameter" resultMap="userResultMap" parameterType="list">
+    <select id="queryUserByParameter" resultMap="userResultMap" parameterType="User">
         select *from t_user
         <where>
             <if test="loginacct!=null and loginacct!='' ">

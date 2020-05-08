@@ -30,7 +30,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
         //判断用户是否存在
         HttpSession session = request.getSession();
-        List<User> users = (List<User>) session.getAttribute("user");
+        User users = (User) session.getAttribute("user");
         if (users!=null){
             return true;
         }else {

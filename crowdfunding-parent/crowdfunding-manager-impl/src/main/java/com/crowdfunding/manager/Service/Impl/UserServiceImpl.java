@@ -23,7 +23,7 @@ private IUserDao iUserDao;
     }
 
     @Override
-    public List<User> queryUserByParameter(Map<String, Object> parameter) {
+    public User queryUserByParameter(Map<String, Object> parameter) {
         return iUserDao.queryUserByParameter(parameter);
     }
 

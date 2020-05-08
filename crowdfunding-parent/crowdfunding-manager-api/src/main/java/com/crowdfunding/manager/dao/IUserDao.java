@@ -19,7 +19,7 @@ public interface IUserDao {
      *根据传入的参数查询用户
      * @return
      */
-    List<User> queryUserByParameter(Map<String,Object> parameter);
+    User queryUserByParameter(Map<String,Object> parameter);
 
     boolean insertUserByParameter(Map<String,Object> parameter);
 
